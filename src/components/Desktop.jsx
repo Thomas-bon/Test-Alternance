@@ -4,6 +4,7 @@ import Window from './Window'
 import NotePage from './pages_app/NotePage'
 import CodePage from './pages_app/CodePage'
 import TerminalPage from './pages_app/TerminalPage'
+import FinderPage from './pages_app/FinderPage'
 
 // Liste des apps du bureau
 const desktopApps = [
@@ -20,19 +21,20 @@ const IframeSignEtMoi = () => (
     />
 )
 
-const appContents = {
+const getAppContents = (openApp) => ({
     Notes: <NotePage />,
     Code: <CodePage />,
     Terminal: <TerminalPage />,
-    SignEtMoi: <IframeSignEtMoi />
-}
+    SignEtMoi: <IframeSignEtMoi />,
+    Finder: <FinderPage openApp={openApp} />
+})
 
 const Desktop = () => {
     // Liste des fenêtres ouvertes (objet avec nom, position et zIndex)
     const [openWindows, setOpenWindows] = useState([])
 
     // Ouvre une app si elle n'est pas déjà ouverte, position aléatoire et zIndex basé sur timestamp
-    const openApp = (appName) => {
+    const openApp = (appName, content = null, isProject = false) => {
         setOpenWindows((prev) => {
             if (prev.find(win => win.name === appName)) return prev // déjà ouverte
 
@@ -45,7 +47,9 @@ const Desktop = () => {
                 {
                     name: appName,
                     zIndex: 3,
-                    position: { x: randomX, y: randomY }
+                    position: { x: randomX, y: randomY },
+                    content,
+                    isProject
                 }
             ]
         })
@@ -95,8 +99,10 @@ const Desktop = () => {
                     zIndex={win.zIndex}
                     onClick={() => bringToFront(win.name)}
                     onClose={() => closeApp(win.name)}
+                    isProject={win.isProject}
                 >
-                    {appContents[win.name]}
+                    {/* {appContents[win.name]} */}
+                    {win.content ?? getAppContents(openApp)[win.name]}
                 </Window>
             ))}
 
