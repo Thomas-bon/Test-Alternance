@@ -5,6 +5,7 @@ import NotePage from './pages_app/NotePage'
 import CodePage from './pages_app/CodePage'
 import TerminalPage from './pages_app/TerminalPage'
 import FinderPage from './pages_app/FinderPage'
+import { TOP_BAR_HEIGHT } from '../utils/constants'
 
 // Liste des apps du bureau
 const desktopApps = [
@@ -40,7 +41,7 @@ const Desktop = () => {
 
             // Position aléatoire (tu peux adapter les valeurs pour tenir compte de la taille écran)
             const randomX = Math.floor(Math.random() * (window.innerWidth - 400))
-            const randomY = Math.floor(Math.random() * (window.innerHeight - 300))
+            const randomY = Math.floor(Math.random() * (window.innerHeight - 300 - TOP_BAR_HEIGHT)) + TOP_BAR_HEIGHT;
 
             return [
                 ...prev,
@@ -49,7 +50,8 @@ const Desktop = () => {
                     zIndex: 3,
                     position: { x: randomX, y: randomY },
                     content,
-                    isProject
+                    isProject,
+                    disableMaximize: appName === "Signe Et Moi"
                 }
             ]
         })
@@ -100,6 +102,7 @@ const Desktop = () => {
                     onClick={() => bringToFront(win.name)}
                     onClose={() => closeApp(win.name)}
                     isProject={win.isProject}
+                    disableMaximize={win.disableMaximize}
                 >
                     {/* {appContents[win.name]} */}
                     {win.content ?? getAppContents(openApp)[win.name]}

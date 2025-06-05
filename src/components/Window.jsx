@@ -1,8 +1,10 @@
 import React, { useState, useRef } from 'react'
+import { TOP_BAR_HEIGHT } from '../utils/constants'
+
 
 const PHONE_SIZE = { width: 410, height: 790 }
 
-const Window = ({ title, children, onClose, onClick, initialPos, zIndex, isProject }) => {
+const Window = ({ title, children, onClose, onClick, initialPos, zIndex, isProject, disableMaximize }) => {
   const [pos, setPos] = useState(initialPos || { x: 100, y: 100 })
   const [isMaximized, setIsMaximized] = useState(false)
   const dragStart = useRef(null)
@@ -20,7 +22,7 @@ const Window = ({ title, children, onClose, onClick, initialPos, zIndex, isProje
     window.addEventListener('mouseup', onDragEnd)
   }
 
-  const TOP_BAR_HEIGHT = 48
+  // const TOP_BAR_HEIGHT = 48
 
   const onDrag = (e) => {
     let newX = e.clientX - dragStart.current.x
@@ -38,6 +40,7 @@ const Window = ({ title, children, onClose, onClick, initialPos, zIndex, isProje
   }
 
   const toggleMaximize = () => {
+    if (disableMaximize) return
     if (isMaximized) {
       setSize(isProject ? PHONE_SIZE : { width: 384, height: 256 })
       setPos({ x: 100, y: 100 })
@@ -74,15 +77,18 @@ const Window = ({ title, children, onClose, onClick, initialPos, zIndex, isProje
         <span>{title}</span>
 
         <div className="flex space-x-1">
-          <button
-            onClick={(e) => {
-              // e.stopPropagation() // empêche le click de remonter et trigger bringToFront
-              toggleMaximize()
-            }}
-            className="text-white font-bold px-2 hover:text-green-400"
-          >
-            {isMaximized ? '🗗' : '⬜'}
-          </button>
+          {!disableMaximize && (
+            <button
+              onClick={(e) => {
+                // e.stopPropagation() // empêche le click de remonter et trigger bringToFront
+                toggleMaximize()
+              }}
+              className="text-white font-bold px-2 hover:text-green-400"
+            >
+              {isMaximized ? '🗗' : '⬜'}
+            </button>
+
+          )}
 
           <button
             onClick={(e) => {

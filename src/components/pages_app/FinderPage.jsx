@@ -10,7 +10,7 @@ const FinderPage = ({ openApp }) => {
             { name: 'CV.pdf', type: 'file', path: "/public/pdf/CV.pdf" },
         ],
         Projects: [
-            { name: 'Sign Et moi', type: 'project', path: "https://signeetmoi.vercel.app" },
+            { name: 'Signe Et Moi', type: 'project', path: "https://signeetmoi.vercel.app" },
         ]
     }
 
@@ -51,7 +51,7 @@ const FinderPage = ({ openApp }) => {
             {currentFolder !== 'root' && (
                 <button
                     onClick={() => setCurrentFolder('root')}
-                    className='flex items-center gap-2 text-left hover:underline'
+                    className='flex items-center gap-2 text-left hover:underline border-[0.5px] rounded-[12px] p-1 pr-2 pl-2 mb-4'
                 >
                     <span className='text-xl'>↩️</span>
                     <span className='cursor-pointer'>Retour</span>
